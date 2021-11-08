@@ -52,7 +52,7 @@ soh_t mySoh;
 beacon b = {1};
 
 
-
+void receiveCmd();
 void delay(int i);
 void sendTlm();
 void writeTlm(const char* pkt, uint8_t size);
@@ -73,7 +73,7 @@ int main(void)
 
     b.id = 2;
     b.length = 8;
-    b.temp = 360286883613245185;
+    b.temp = 123;
     b.voltage = 21;
     b.current = 3;
     b.state = 1;
@@ -81,6 +81,7 @@ int main(void)
 
     while (1)
     {
+    	receiveCmd();
     	sendTlm();
     	delay(99999999);
     }
@@ -97,16 +98,29 @@ void sendTlm()
 //  mySoh.length = sizeof(mySoh);
 //  writeTlm((const char*)&mySoh, sizeof(mySoh));
 	b.length = (uint64_t)(sizeof(b));
-	PRINTF("%x\r\n", &(b.length));
-	PRINTF("%x\r\n", &(b.id));
-	PRINTF("%x\r\n", &(b.temp));
-	PRINTF("%x\r\n", &(b.voltage));
-	PRINTF("%x\r\n", &(b.current));
-	PRINTF("%x\r\n", &(b.charge));
-	PRINTF("%x\r\n", &(b.state));
-	PRINTF("%x\r\n", b.temp);
+//	PRINTF("%x\r\n", &(b.length));
+//	PRINTF("%x\r\n", &(b.id));
+//	PRINTF("%x\r\n", &(b.temp));
+//	PRINTF("%x\r\n", &(b.voltage));
+//	PRINTF("%x\r\n", &(b.current));
+//	PRINTF("%x\r\n", &(b.charge));
+//	PRINTF("%x\r\n", &(b.state));
+//	PRINTF("%x\r\n", b.temp);
 	writeTlm((const char*)&b, sizeof(b));
-	PRINTF("\r\n");
+//	PRINTF("\r\n");
+}
+
+uint64_t cmd_in;
+void receiveCmd(){
+	cmd_in = 0;
+	for (int i = 0; i < sizeof(cmd_in); i++) {
+		cmd_in |= ((uint8_t)GETCHAR()) << 8*i;
+	}
+	if(cmd_in != 0) {
+		b.state = cmd_in;
+	}
+
+
 }
 
 
@@ -114,8 +128,8 @@ void writeTlm(const char* pkt, uint8_t size)
 {
   for(int i=0; i<size; i++)
   {
-	if (i!= 0 && i % 8 == 0) PRINTF("\r\n");
-    PRINTF("%x ", pkt[i]);
+//	if (i!= 0 && i % 8 == 0) PRINTF("\r\n");
+    PRINTF("%c", pkt[i]);
 
   }
 }
