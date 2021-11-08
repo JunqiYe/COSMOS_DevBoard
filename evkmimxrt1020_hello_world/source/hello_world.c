@@ -35,20 +35,23 @@ typedef struct soh_t
 
 }soh_t;
 
+// Everything is 64bits to for data alignment
 typedef struct beacon
 {
-	uint8_t length;
-	uint8_t id;
+	uint64_t length;
+	uint64_t id;
 	uint64_t temp;
 	uint64_t voltage;
 	uint64_t current;
-	uint16_t charge;
-	uint8_t state;
+	uint64_t charge;
+	uint64_t state;
 } beacon;
 
 soh_t mySoh;
 
 beacon b = {1};
+
+
 
 void delay(int i);
 void sendTlm();
@@ -70,7 +73,7 @@ int main(void)
 
     b.id = 2;
     b.length = 8;
-    b.temp = 1024;
+    b.temp = 360286883613245185;
     b.voltage = 21;
     b.current = 3;
     b.state = 1;
@@ -78,13 +81,8 @@ int main(void)
 
     while (1)
     {
-//    	processCmds();
     	sendTlm();
     	delay(99999999);
-//    	PRINTF("9");
-//        ch = GETCHAR();
-//        PRINTF("%c\n", ch);
-//        PUTCHAR(ch);
     }
 }
 
@@ -93,37 +91,31 @@ void delay(int i) {
 	for (int i = 0; i < delay; i++) {}
 }
 
-uint8_t mask = 0xff;
-void send_beacon(beacon* b) {
-	// temp
-	for (int i = 0; i < sizeof(b->temp); i++) {
-		uint8_t rst = (long)(b->temp) >> 8*i;
-		//printf(“%x”, rst);
-		rst &= mask;
-		//printf(“%x”, rst);
-		//printf(“\n”);
-	}
-}
 
 void sendTlm()
 {
 //  mySoh.length = sizeof(mySoh);
 //  writeTlm((const char*)&mySoh, sizeof(mySoh));
-	b.length = (uint8_t)(sizeof(b));
+	b.length = (uint64_t)(sizeof(b));
+	PRINTF("%x\r\n", &(b.length));
+	PRINTF("%x\r\n", &(b.id));
+	PRINTF("%x\r\n", &(b.temp));
+	PRINTF("%x\r\n", &(b.voltage));
+	PRINTF("%x\r\n", &(b.current));
+	PRINTF("%x\r\n", &(b.charge));
+	PRINTF("%x\r\n", &(b.state));
+	PRINTF("%x\r\n", b.temp);
 	writeTlm((const char*)&b, sizeof(b));
+	PRINTF("\r\n");
 }
 
-//void processCmds(){
-//	while (SCANF()){
-//		mySoh.data = GETCHAR();
-//	}
-//
-//}
 
 void writeTlm(const char* pkt, uint8_t size)
 {
   for(int i=0; i<size; i++)
   {
-    PRINTF("%c", pkt[i]);
+	if (i!= 0 && i % 8 == 0) PRINTF("\r\n");
+    PRINTF("%x ", pkt[i]);
+
   }
 }

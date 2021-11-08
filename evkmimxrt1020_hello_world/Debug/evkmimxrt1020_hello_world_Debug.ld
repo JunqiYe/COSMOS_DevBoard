@@ -6,7 +6,7 @@
  * Generated linker script file for MIMXRT1021xxxxx
  * Created from linkscript.ldt by FMCreateLinkLibraries
  * Using Freemarker v2.3.30
- * MCUXpresso IDE v11.4.0 [Build 6237] [2021-08-06] on Nov 1, 2021, 3:58:03 PM
+ * MCUXpresso IDE v11.3.1 [Build 5262] [2021-04-02] on Nov 7, 2021 11:53:21 PM
  */
 
 INCLUDE "evkmimxrt1020_hello_world_Debug_library.ld"
