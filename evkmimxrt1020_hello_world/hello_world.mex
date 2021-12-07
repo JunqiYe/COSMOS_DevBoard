@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding= "UTF-8" ?>
-<configuration name="MIMXRT1021xxxxx" xsi:schemaLocation="http://mcuxpresso.nxp.com/XSD/mex_configuration_1.8 http://mcuxpresso.nxp.com/XSD/mex_configuration_1.8.xsd" uuid="4401e96c-7234-4f63-8926-bf230d0a9a8c" version="1.8" xmlns="http://mcuxpresso.nxp.com/XSD/mex_configuration_1.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<configuration name="MIMXRT1021xxxxx" xsi:schemaLocation="http://mcuxpresso.nxp.com/XSD/mex_configuration_10 http://mcuxpresso.nxp.com/XSD/mex_configuration_10.xsd" uuid="4401e96c-7234-4f63-8926-bf230d0a9a8c" version="10" xmlns="http://mcuxpresso.nxp.com/XSD/mex_configuration_10" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
    <common>
       <processor>MIMXRT1021xxxxx</processor>
       <package>MIMXRT1021DAG5A</package>
@@ -14,11 +14,16 @@
       <validate_boot_init_only>true</validate_boot_init_only>
       <generate_extended_information>false</generate_extended_information>
       <generate_code_modified_registers_only>false</generate_code_modified_registers_only>
+      <update_include_paths>true</update_include_paths>
    </preferences>
    <tools>
-      <pins name="Pins" version="8.0" enabled="true" update_project_code="true">
+      <pins name="Pins" version="10.0" enabled="true" update_project_code="true">
+         <generated_project_files>
+            <file path="board/pin_mux.c" update_enabled="true"/>
+            <file path="board/pin_mux.h" update_enabled="true"/>
+         </generated_project_files>
          <pins_profile>
-            <processor_version>0.8.9</processor_version>
+            <processor_version>10.0.0</processor_version>
             <power_domains>
                <power_domain name="NVCC_GPIO" value="3.3"/>
             </power_domains>
@@ -39,6 +44,11 @@
                      </feature>
                   </dependency>
                   <dependency resourceType="Peripheral" resourceId="ARM" description="Peripheral ARM is not initialized" problem_level="1" source="Pins:BOARD_InitPins">
+                     <feature name="initialized" evaluation="equal">
+                        <data>true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="Peripheral" resourceId="LPUART2" description="Peripheral LPUART2 is not initialized" problem_level="1" source="Pins:BOARD_InitPins">
                      <feature name="initialized" evaluation="equal">
                         <data>true</data>
                      </feature>
@@ -72,13 +82,19 @@
                         <pin_feature name="slew_rate" value="Fast"/>
                      </pin_features>
                   </pin>
+                  <pin peripheral="LPUART2" signal="RX" pin_num="81" pin_signal="GPIO_AD_B1_09"/>
+                  <pin peripheral="LPUART2" signal="TX" pin_num="82" pin_signal="GPIO_AD_B1_08"/>
                </pins>
             </function>
          </functions_list>
       </pins>
-      <clocks name="Clocks" version="7.0" enabled="true" update_project_code="true">
+      <clocks name="Clocks" version="8.0" enabled="true" update_project_code="true">
+         <generated_project_files>
+            <file path="board/clock_config.c" update_enabled="true"/>
+            <file path="board/clock_config.h" update_enabled="true"/>
+         </generated_project_files>
          <clocks_profile>
-            <processor_version>0.8.9</processor_version>
+            <processor_version>10.0.0</processor_version>
          </clocks_profile>
          <clock_configurations>
             <clock_configuration name="BOARD_BootClockRUN">
@@ -218,8 +234,12 @@
          </clock_configurations>
       </clocks>
       <dcdx name="DCDx" version="3.0" enabled="true" update_project_code="true">
+         <generated_project_files>
+            <file path="board/dcd.c" update_enabled="true"/>
+            <file path="board/dcd.h" update_enabled="true"/>
+         </generated_project_files>
          <dcdx_profile>
-            <processor_version>0.8.9</processor_version>
+            <processor_version>10.0.0</processor_version>
             <output_format>c_array</output_format>
          </dcdx_profile>
          <dcdx_configurations>
@@ -354,21 +374,86 @@
             </dcdx_configuration>
          </dcdx_configurations>
       </dcdx>
-      <periphs name="Peripherals" version="8.0" enabled="true" update_project_code="true">
+      <periphs name="Peripherals" version="10.0" enabled="true" update_project_code="true">
+         <dependencies>
+            <dependency resourceType="SWComponent" resourceId="platform.drivers.lpuart" description="LPUART Driver not found in the toolchain/IDE project. Project will not compile!" problem_level="2" source="Peripherals">
+               <feature name="enabled" evaluation="equal">
+                  <data type="Boolean">true</data>
+               </feature>
+            </dependency>
+            <dependency resourceType="SWComponent" resourceId="platform.drivers.lpuart" description="Unsupported version of the LPUART Driver in the toolchain/IDE project. Required: ${required_value}, actual: ${actual_value}. Project might not compile correctly." problem_level="1" source="Peripherals">
+               <feature name="version" evaluation="equivalent">
+                  <data type="Version">2.5.1</data>
+               </feature>
+            </dependency>
+         </dependencies>
+         <generated_project_files>
+            <file path="board/peripherals.c" update_enabled="true"/>
+            <file path="board/peripherals.h" update_enabled="true"/>
+         </generated_project_files>
          <peripherals_profile>
-            <processor_version>0.8.9</processor_version>
+            <processor_version>10.0.0</processor_version>
          </peripherals_profile>
          <functional_groups>
             <functional_group name="BOARD_InitPeripherals" uuid="6d394465-bc9b-47f2-9a1f-3ca61f76d27b" called_from_default_init="true" id_prefix="" core="core0">
                <description></description>
                <options/>
-               <dependencies/>
-               <instances/>
+               <dependencies>
+                  <dependency resourceType="ClockOutput" resourceId="UART_CLK_ROOT" description="UART_CLK_ROOT is inactive." problem_level="2" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="frequency" evaluation="greaterThan">
+                        <data type="Frequency" unit="Hz">0</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="LPUART2.uart_tx" description="Signal TX of the peripheral LPUART2 is not routed." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="LPUART2.uart_rx" description="Signal RX of the peripheral LPUART2 is not routed." problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+               </dependencies>
+               <instances>
+                  <instance name="NVIC" uuid="67729b72-9cad-4ee0-a0cd-dc96f2831a30" type="nvic" type_id="nvic_57b5eef3774cc60acaede6f5b8bddc67" mode="general" peripheral="NVIC" enabled="true" comment="" custom_name_enabled="false" editing_lock="false">
+                     <config_set name="nvic">
+                        <array name="interrupt_table"/>
+                        <array name="interrupts"/>
+                     </config_set>
+                  </instance>
+                  <instance name="LPUART2" uuid="6d81ef57-b078-4443-9c5c-51f5e9c85089" type="lpuart" type_id="lpuart_bf01db7d964092f3cf860852cba17f7e" mode="polling" peripheral="LPUART2" enabled="true" comment="" custom_name_enabled="false" editing_lock="false">
+                     <config_set name="lpuartConfig_t">
+                        <struct name="lpuartConfig">
+                           <setting name="clockSource" value="LpuartClock"/>
+                           <setting name="lpuartSrcClkFreq" value="BOARD_BootClockRUN"/>
+                           <setting name="baudRate_Bps" value="38400"/>
+                           <setting name="parityMode" value="kLPUART_ParityDisabled"/>
+                           <setting name="dataBitsCount" value="kLPUART_EightDataBits"/>
+                           <setting name="isMsb" value="false"/>
+                           <setting name="stopBitCount" value="kLPUART_OneStopBit"/>
+                           <setting name="txFifoWatermark" value="0"/>
+                           <setting name="rxFifoWatermark" value="1"/>
+                           <setting name="enableRxRTS" value="false"/>
+                           <setting name="enableTxCTS" value="false"/>
+                           <setting name="txCtsSource" value="kLPUART_CtsSourcePin"/>
+                           <setting name="txCtsConfig" value="kLPUART_CtsSampleAtStart"/>
+                           <setting name="rxIdleType" value="kLPUART_IdleTypeStartBit"/>
+                           <setting name="rxIdleConfig" value="kLPUART_IdleCharacter1"/>
+                           <setting name="enableTx" value="true"/>
+                           <setting name="enableRx" value="true"/>
+                        </struct>
+                     </config_set>
+                  </instance>
+               </instances>
             </functional_group>
          </functional_groups>
          <components>
             <component name="system" uuid="96e5bf72-41b1-4cb1-aa70-388659456320" type_id="system_54b53072540eeeb8f8e9343e71f28176">
-               <config_set_global name="global_system_definitions"/>
+               <config_set_global name="global_system_definitions">
+                  <setting name="user_definitions" value=""/>
+                  <setting name="user_includes" value=""/>
+               </config_set_global>
             </component>
             <component name="msg" uuid="c92307eb-d397-4031-9516-2fe714e11849" type_id="msg_6e2baaf3b97dbeef01c0043275f9a0e7">
                <config_set_global name="global_messages"/>
@@ -379,14 +464,19 @@
             <component name="generic_can" uuid="26fd4310-8287-4ea2-9b08-70e9ea5c8d01" type_id="generic_can_1bfdd78b1af214566c1f23cf6a582d80">
                <config_set_global name="global_can"/>
             </component>
+            <component name="generic_enet" uuid="1cac9095-485f-4e8f-8da0-a3eeb95b32e7" type_id="generic_enet_74db5c914f0ddbe47d86af40cb77a619">
+               <config_set_global name="global_enet"/>
+            </component>
+            <component name="uart_cmsis_common" uuid="7e62b9ad-0f10-4e8b-9613-cb9a107da55f" type_id="uart_cmsis_common_9cb8e302497aa696fdbb5a4fd622c2a8">
+               <config_set_global name="global_USART_CMSIS_common" quick_selection="default"/>
+            </component>
          </components>
       </periphs>
       <tee name="TEE" version="2.0" enabled="false" update_project_code="true">
+         <generated_project_files/>
          <tee_profile>
             <processor_version>N/A</processor_version>
          </tee_profile>
-         <global_options/>
-         <user_memory_regions/>
       </tee>
    </tools>
 </configuration>

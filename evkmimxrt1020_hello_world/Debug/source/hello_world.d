@@ -16,7 +16,8 @@ source/hello_world.o source/hello_world.d: ../source/hello_world.c \
  /Users/norgaardc/Desktop/CubeSat/COSMOS_DevBoard/evkmimxrt1020_hello_world/board/clock_config.h \
  /Users/norgaardc/Desktop/CubeSat/COSMOS_DevBoard/evkmimxrt1020_hello_world/board/board.h \
  /Users/norgaardc/Desktop/CubeSat/COSMOS_DevBoard/evkmimxrt1020_hello_world/board/clock_config.h \
- /Users/norgaardc/Desktop/CubeSat/COSMOS_DevBoard/evkmimxrt1020_hello_world/drivers/fsl_gpio.h
+ /Users/norgaardc/Desktop/CubeSat/COSMOS_DevBoard/evkmimxrt1020_hello_world/drivers/fsl_gpio.h \
+ ../source/com_wrap.h
 /Users/norgaardc/Desktop/CubeSat/COSMOS_DevBoard/evkmimxrt1020_hello_world/device/fsl_device_registers.h:
 /Users/norgaardc/Desktop/CubeSat/COSMOS_DevBoard/evkmimxrt1020_hello_world/device/MIMXRT1021.h:
 /Users/norgaardc/Desktop/CubeSat/COSMOS_DevBoard/evkmimxrt1020_hello_world/CMSIS/core_cm7.h:
@@ -35,3 +36,4 @@ source/hello_world.o source/hello_world.d: ../source/hello_world.c \
 /Users/norgaardc/Desktop/CubeSat/COSMOS_DevBoard/evkmimxrt1020_hello_world/board/board.h:
 /Users/norgaardc/Desktop/CubeSat/COSMOS_DevBoard/evkmimxrt1020_hello_world/board/clock_config.h:
 /Users/norgaardc/Desktop/CubeSat/COSMOS_DevBoard/evkmimxrt1020_hello_world/drivers/fsl_gpio.h:
+../source/com_wrap.h:

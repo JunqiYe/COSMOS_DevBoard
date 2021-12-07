@@ -4,14 +4,17 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
+../source/com_wrap.c \
 ../source/hello_world.c \
 ../source/semihost_hardfault.c 
 
 OBJS += \
+./source/com_wrap.o \
 ./source/hello_world.o \
 ./source/semihost_hardfault.o 
 
 C_DEPS += \
+./source/com_wrap.d \
 ./source/hello_world.d \
 ./source/semihost_hardfault.d 
 
